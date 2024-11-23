@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Song Rating</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="Check-if-Account">
+      <h2>Hier Anmelden</h2>
+
+      <form class="User-Data" method="POST" action="{{ url_for('login') }}">
+        <div class="form-group">
+          <input
+            name="Username"
+            class="Username-Input"
+            type="text"
+            placeholder="Benutzername"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <input
+            name="Password"
+            class="Password-Input"
+            type="password"
+            placeholder="Passwort"
+            required
+          />
+        </div>
+
+        <button class="submit" type="submit">Senden</button>
+      </form>
+
+      <p>
+        <a class="register" href="{{ url_for('register') }}"
+          >Oder hier Registrieren</a
+        >
+      </p>
+    </div>
+  </body>
+</html>
