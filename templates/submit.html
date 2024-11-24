@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Song einreichen</title>
+    <style>
+      html,
+      body {
+        background-color: #121212;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        color: #ffffff;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .form-container {
+        background-color: #393939;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .form-container input,
+      .form-container button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      .form-container input {
+        background-color: #525151;
+        color: #ffffff;
+      }
+      .form-container button {
+        background-color: #1db954;
+        color: white;
+        cursor: pointer;
+      }
+      .form-container button:hover {
+        background-color: #17a84a;
+      }
+      .song-list {
+        margin-top: 20px;
+      }
+      .song-item {
+        background-color: #2a2a2a;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+      }
+      iframe {
+        width: 100%;
+        height: 80px;
+        border-radius: 12px;
+      }
+
+      .delete-button {
+        background-color: rgba(233, 54, 54, 0.991);
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+      }
+
+      .delete-button:hover {
+        background-color: rgba(204, 48, 48, 0.991);
+      }
+
+      .flash-message {
+        margin: 20px 0;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+      }
+
+      .success {
+        background-color: #28a745;
+      }
+
+      .error {
+        background-color: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Flash-Nachrichten -->
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="flash-message {% if category == 'error' %}error{% else %}success{% endif %}"
+      >
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <div class="form-container">
+        <h1>Song einreichen</h1>
+        <form action="/submit" method="POST">
+          <input type="hidden" name="user_id" value="{{ user_id }}" />
+          <div>
+            <label for="title">Songtitel:</label>
+            <input type="text" id="title" name="title" required /><br />
+            <label for="artist">Künstler:</label>
+            <input type="text" id="artist" name="artist" required /><br />
+            <label for="url">URL:</label>
+            <input type="url" id="url" name="url" required /><br />
+            <button type="submit">Einreichen</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Abgeben Button in einem eigenen Formular -->
+      {% if song_count >= 10 or is_testing %}
+      <form action="{{ url_for('submit_final') }}" method="POST">
+        <button
+          type="submit"
+          style="
+            background-color: #1db954;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+          "
+        >
+          Songs abgeben
+        </button>
+      </form>
+      {% endif %}
+
+      <div class="song-list">
+        <h2>Eingereichte Songs</h2>
+
+        <p>
+          Du hast bisher {{ songs|length }} von maximal 30 Songs eingereicht.
+        </p>
+
+        {% if songs|length < 10 %}
+        <p style="color: orange">Du musst mindestens 10 Songs einreichen!</p>
+        {% elif songs|length >= 30 %}
+        <p style="color: red">
+          Du kannst keine weiteren Songs einreichen (max. 30).
+        </p>
+        {% endif %} {% for song in songs %}
+        <div class="song-item">
+          <div><strong>{{ song[2] }}</strong> - <em>{{ song[3] }}</em></div>
+          <iframe
+            src="{{ song[4].replace('track/', 'embed/track/') }}"
+            frameborder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          >
+          </iframe>
+          <!-- Delete Button -->
+          <form
+            action="{{ url_for('delete', song_id=song[0]) }}"
+            method="POST"
+            style="margin-top: 10px"
+          >
+            <button class="delete-button" type="submit">Song löschen</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

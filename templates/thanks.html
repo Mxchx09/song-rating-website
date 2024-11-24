@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danke!</title>
+    <style>
+      body {
+        background-color: #121212;
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .message {
+        text-align: center;
+        padding: 20px;
+        background-color: #393939;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 400px;
+      }
+      .message h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+      .message p {
+        font-size: 16px;
+      }
+      .button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #1db954;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .button:hover {
+        background-color: #17a84a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="message">
+      <h1>Danke für deine Einreichung!</h1>
+      <p>
+        Deine Songs wurden erfolgreich eingereicht. Du wirst bald
+        benachrichtigt, wenn sie bewertet wurden.
+      </p>
+      <a href="{{ url_for('submit') }}" class="button"
+        >Zurück zur Song-Einreichung</a
+      >
+    </div>
+  </body>
+</html>
